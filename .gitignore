@@ -1,2 +1,5 @@
-domain
-domain/*
+DataSet
+DaraSet/*
+*.csv
+*.txt
+*.pyc
