@@ -1,1 +1,9 @@
+gensim==0.13.4.1
+Keras==1.1.1
+numpy==1.12.0
+pandas==0.17.1
+scipy==0.18.1
+tensorflow==0.12.1
 textmining==1.0
+tflearn==0.2.1
+Theano==0.8.2

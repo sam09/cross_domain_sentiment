@@ -69,7 +69,7 @@ def add_senti_score( file_path, tdm_rows, word_index_dict):
                     continue
     return len(docs), tdm_rows
 
-def termdocumentmatrix(train_path, test_path):
+def termdocumentmatrix(train_path, test_path, cnn=True):
     
     tdm = textmining.TermDocumentMatrix()
 
@@ -87,11 +87,16 @@ def termdocumentmatrix(train_path, test_path):
     train_len, tdm_rows = add_senti_score(train_path, tdm_rows, word_index_dict)
     test_len, tdm_rows = add_senti_score(test_path, tdm_rows, word_index_dict)
 
-    train_tdm = reshapeX(np.asarray(tdm_rows[1:train_len+1]))
-    test_tdm = reshapeX(np.asarray(tdm_rows[train_len+1:train_len+test_len+1]))
-    
-    train_labels = reshapeY(np.asarray(train_labels))
+    train_tdm = np.asarray(tdm_rows[1:train_len+1])
+    test_tdm = np.asarray(tdm_rows[train_len+1:train_len+test_len+1])
+    train_labels = np.asarray(train_labels)
+    if cnn:
+        train_tdm = reshapeX(train_tdm)
+        test_tdm = reshapeX(test_tdm)
+        train_labels = reshapeY(train_labels)
+        
     test_labels = np.asarray(test_labels)
+
 
     return train_labels, train_tdm, test_labels, test_tdm, words
     
