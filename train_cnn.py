@@ -7,7 +7,7 @@ TRAIN_DIR = "Data/train/"
 TEST_DIR = "Data/test/"
 UNLABELED_DIR = "Data/"
 
-output = "TDM_OUTPUT.txt"
+output = "CNN_OUTPUT.txt"
 
 
 def get_accuracy(model, testX, testY):
@@ -33,7 +33,6 @@ def train(i, j):
 	test_path = TEST_DIR + j + "Test.csv"
 
 	trainY, trainX, testY, testX, words  = termdocumentmatrix(train_path, test_path)
-	print "Imported Data"
 	n = len(trainX[0][0])
 
 	model = CNN(n).get_model()
