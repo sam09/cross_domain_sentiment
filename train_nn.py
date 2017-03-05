@@ -4,10 +4,10 @@ from keras.layers import Dense
 
 
 
-def create_model(n,l):
+def create_model(l):
 	model = Sequential()
-	model.add(Dense(n, input_dim=l, init='uniform', activation='relu'))
-	model.add(Dense(n/2, init='uniform', activation='relu'))
+	model.add(Dense(l, input_dim=l, init='uniform', activation='relu'))
+	model.add(Dense(l/2, init='uniform', activation='relu'))
 	model.add(Dense(1, init='uniform', activation='tanh'))
 
 
@@ -21,13 +21,10 @@ TEST_DIR = "Data/test/"
 UNLABELED_DIR = "Data/"
 
 output = "NN_OUTPUT.txt"
-names = ["Book"]#, "Kitchen", "Electronics", "DVD"]
+names = ["Book", "Kitchen", "Electronics", "DVD"]
 
-write_str = "Training Domain\tTarget Domain\tAccuracy on Labeled Data\tAccuracy on Unlabeled Data\n"
-def get_accuracy(model, testX, testY):
-
-	pred = model.predict(testX)
-	pred = np_utils.probas_to_classes(pred)
+write_str = "Training Domain\tTarget Domain\tAccuracy on Labeled Data\n"
+def get_accuracy(pred, testY):
 
 	correct = 0
 	for i in range(0, len(pred)):
@@ -45,14 +42,15 @@ for i in names:
 
 		trainY, trainX, testY, testX, words = termdocumentmatrix(train_path=train_path, test_path=test_path, cnn=False)
 		l = len(trainX[0])
-		n = len(trainX)
-		print n, l
-		model = create_model(n,l)
+		model = create_model(l)
 
 		# train
-		model.fit(trainX, trainY, nb_epoch=20, batch_size=500)
+		model.fit(trainX, trainY, nb_epoch=15, batch_size=100)
+		pred = model.predict(testX)
+		pred = [round(x) for x in pred]
 		
-		test_accuracy = get_accuracy(model, testX, testY)	
+		test_accuracy = get_accuracy(pred, testY)
+		print i, j, test_accuracy
 		write_str += str(i)+"\t"+str(j)+"\t"+str(test_accuracy) + "\n"
 
 f = open(output, "w")
