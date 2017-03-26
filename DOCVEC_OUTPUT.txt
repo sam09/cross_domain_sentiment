@@ -1,0 +1,5 @@
+				Book		DVD			Electronics 	Kitchen
+Book			71.5		70.25			63.5		64.75
+DVD				70			63.5			79.25		73
+Electronics		60.75       62.75			69.75		69
+Kitchen			68.25		68.5			77			79
