@@ -4,14 +4,15 @@ from collections import namedtuple
 from cnn import CNN
 import string
 import numpy as np
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression as LR
 from sklearn.svm import SVC
 from keras.utils import np_utils
 from random import shuffle
 from gensim.test.test_doc2vec import ConcatenatedDoc2Vec
 
-train_path = "Data/train/BookTrain.csv"
-test_path = "Data/test/BookTest.csv"
+train_path = ["Data/train/DVDTrain.csv", "Data/train/KitchenTrain.csv", "Data/ElectronicsUnlabel.csv" "Data/train/DVDTrain.csv"]
+
+test_path = "Data/train/ElectronicsTrain.csv"
 print train_path, test_path
 SentimentDocument = namedtuple("SentimentDocument", "words tags sentiment split")
 
@@ -62,11 +63,16 @@ def get_accuracy(pred, testY):
 	for i in range(0, len(pred)):
 		if pred[i] == testY[i]:
 			c+=1
+	print c
 	c = c*1.0
 	c/= len(testY)
+	print len(testY)
    	return c
 
-get_data(train_path)
+get_data(train_path[0])
+#get_data(train_path[2])
+get_data(train_path[1])
+
 get_data(test_path, split="test")
 
 train_docs = [doc for doc in alldocs if doc.split == 'train']
@@ -91,7 +97,7 @@ models_by_name.append(ConcatenatedDoc2Vec([simple_models[1], simple_models[2]]))
 
 doc_list = alldocs[:]
 
-passes = 20
+passes = 10
 
 for epoch in range(passes):
 	shuffle(doc_list)
@@ -100,17 +106,31 @@ for epoch in range(passes):
 	print epoch,  " Done" 
 
 #training with SVC
-"""
+
 for model in models_by_name:
 	trainX, trainY  = split(train_docs, model)
 	testX, testY = split(test_docs, model)
-	linear_model = SVC()
+	linear_model = SVC(probability=True)
 	linear_model.fit(trainX, trainY)
-	pred = linear_model.predict(testX)
-	test_accuracy = get_accuracy(pred, testY)
+	pred = linear_model.predict_proba(testX)
+	c = 0
+	tot =0
+	for i in range(0, len(pred)):
+		if pred[i][0] >= 0.60 or pred[i][0] <=0.40:
+			tot += 1
+		if pred[i][0] > 0.5 and testY[i] == 0:
+			c+=1
+		elif testY[i]==1 and pred[i][0] <0.5:
+			c+=1
+
+	#test_accuracy = get_accuracy(pred, testY)
+	c*=1.0
+	tot *= 1.0
+	test_accuracy = c/tot
 	print test_accuracy
-"""
+
 #training with CNN
+"""
 for model in models_by_name:
 	trainX, trainY  = split(train_docs, model)
 	testX, testY = split(test_docs, model)
@@ -128,3 +148,4 @@ for model in models_by_name:
 	pred = np_utils.probas_to_classes(pred)
 	test_accuracy = get_accuracy(pred, testY)
 	print test_accuracy
+"""

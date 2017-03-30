@@ -51,9 +51,11 @@ def add_senti_score( file_path, tdm_rows, word_index_dict):
     data = open(file_path)
     data.readline()
     docs = data.readlines()
-    """
+    
     for doc in range(0 , len(docs)):
-        doc_str = docs[doc].split(",")[1]
+        doc_str = docs[doc].split(",")
+        doc_str = doc_str[1:]
+        doc_str = " ".join(doc_str)
         sentences = doc_str.split(".")
         
         for sentence in sentences:
@@ -67,7 +69,8 @@ def add_senti_score( file_path, tdm_rows, word_index_dict):
                     tdm_rows[doc][word_index] = score * tdm_rows[doc][word_index]
                 except:
                     continue
-    """
+    
+    data.close()
     return len(docs), tdm_rows
 
 def termdocumentmatrix(train_path, test_path, cnn=True):
