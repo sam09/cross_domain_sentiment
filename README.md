@@ -2,8 +2,8 @@
 A repo for all the research work done for cross domain sentiment analysis
 
 
-#Training 
-###With CNN
+# Training
+### With CNN
 
 Usage 
     `python train_cnn.py <TrainDomain> <TestDomain>`
@@ -21,8 +21,7 @@ To train with a particular domain and test with another domain, just give their 
  *  Electronics
  *  Kitchen
  
-###With a simple Neraul Network
+### With a simple Neural Network
 Run `python train_nn.py`
 
-###With word2vec
-TODO
+
